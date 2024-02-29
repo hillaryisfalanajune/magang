@@ -36,7 +36,11 @@ class Type2021 extends Model
 
    //Relasi tabel users ke posts 1 ke N
    public function kategori(){
+<<<<<<< HEAD
     return $this->hasMany(kategori::class);
+=======
+    return $this->hasMany(Kategori::class);
+>>>>>>> 5d53695b8330d64ae4a55081b02c96f3d85b9442
 }
 
     //user ->oleh laravel user_id, ganti author_id
@@ -48,6 +52,6 @@ class Type2021 extends Model
 
     public function getRouteKeyName()
     {
-        return 'kode';
+        return 'id';
     }
 }

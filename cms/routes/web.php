@@ -1,21 +1,19 @@
 <?php
 
 use App\Models\User;
-use App\Models\Jurusan;
-use App\Models\Category;
+use App\Models\Kategori;
+use App\Models\Produk;
 
-use App\Models\Golongan2021;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\Barang2021Controller;
-use App\Http\Controllers\Penduduk2021Controller;
-use App\Http\Controllers\Pekerja2021Controller;
+use App\Http\Controllers\ProdukControllerr;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\DashboardPostController;
-
+use App\Http\Controllers\ProdukController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,15 +35,15 @@ Route::get('/about-me', function () {
      'title' => 'Tentang Saya', 'active' => 'about-me']);
 });
 
-Route::get('/post',[PostController::class,'index']);
-Route::get('/post/{post:slug}', [PostController::class,'single']);
+// Route::get('/post',[PostController::class,'index']);
+// Route::get('/post/{post:slug}', [PostController::class,'single']);
 
 //tugas
-Route::get('/mahasiswa', [MahasiswaController::class,'index']);
-Route::get('/pekerja2021', [Pekerja2021Controller::class,'index']);
-Route::get('/mhs/{mahasiswa:Nim}', [MahasiswaController::class,'single']);
+Route::get('/produk', [ProdukController::class,'index']);
+// Route::get('/pekerja2021', [Pekerja2021Controller::class,'index']);
+Route::get('/no/{produk:id}', [ProdukController::class,'single']);
 
-Route::get('/post/categories/{category:slug}', function(Category $category){
+Route::get('/produk/categories/{category:slug}', function(Category $category){
     return view('post.index',[
         'title'=>'Category '.$category->name,'active'=>'post',
         'category' => $category->name,
@@ -54,13 +52,13 @@ Route::get('/post/categories/{category:slug}', function(Category $category){
     ]);
 });
 
-Route::get('/post/users/{user:username}', function(User $user){
-    return view('post.index',[
-        'title'=>'Author'.$user->name,'active'=>'post',
-        'author' => $user->name,
-        'data_posts'=>$user->posts->load(['author','category'])
-    ]);
-});
+// Route::get('/post/users/{user:username}', function(User $user){
+//     return view('post.index',[
+//         'title'=>'Author'.$user->name,'active'=>'post',
+//         'author' => $user->name,
+//         'data_posts'=>$user->posts->load(['author','category'])
+//     ]);
+// });
 
 
 Route::get('/mahasiswa/jurusans/{jurusan:slug}', function(Jurusan $jurusan){
