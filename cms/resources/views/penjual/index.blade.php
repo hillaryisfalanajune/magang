@@ -3,7 +3,7 @@
 <h3 class="text-center">{{ $title }}</h3>
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form action="/mahasiswa" method="get">
+        <form action="/penjual" method="get">
             @if (request('jurusan'))
             <input type="hidden" name="jurusan" value="{{ request('jurusan') }}">
             @endif

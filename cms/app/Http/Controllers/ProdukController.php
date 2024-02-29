@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\kategori;
 use App\Models\Produk;
-use App\Models\Type2021;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,7 +26,7 @@ class ProdukController extends Controller
      */
     public function create()
     {
-        return view('dashboard.Produk.create',['title'=>'Tambah Barang', 'Produks' => Produk::all(),'jeniskategoris'=>Type2021::all()]);
+        return view('dashboard.Produk.create',['title'=>'Tambah Barang', 'Produks' => Produk::all(),'jeniskategoris'=>kategori::all()]);
     }
 
     /**
@@ -43,14 +42,13 @@ class ProdukController extends Controller
             [
                 'kode' => 'required|max:100|min:5',
                 'name' => 'required|max:200|min:5',
-                'type2021_id' => 'required',
+                'kategori' => 'required',
                 'tanggal' => 'required|',
                 'hrg_beli' => 'required|',
                 'hrg_jual' => 'required|',
-                'kondisi' => 'required|',
                 'stock' => 'required|',
                 'gambar' => 'image|file|max:1024',
-                'ket' => 'required|min:30'
+                'detail' => 'required|min:1000'
 
             ]
         );

@@ -27,7 +27,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Title</th>
+                                        <th>Nama Produk</th>
                                         <th>Image</th>
                                         <th>Excerpt</th>
                                         <th>Job</th>
