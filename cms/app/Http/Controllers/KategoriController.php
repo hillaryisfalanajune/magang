@@ -35,8 +35,8 @@ class Type2021 extends Model
     }
 
    //Relasi tabel users ke posts 1 ke N
-   public function barang2021(){
-    return $this->hasMany(Barang2021::class);
+   public function kategori(){
+    return $this->hasMany(kategori::class);
 }
 
     //user ->oleh laravel user_id, ganti author_id
