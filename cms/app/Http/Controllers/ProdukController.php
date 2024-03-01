@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kategori;
+
+use App\Models\Kategori;
 use App\Models\Produk;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +18,7 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        return view('dashboard.Produk.index', ['title' => 'Barang','Produks' =>  Produk::latest()->filter(request(['search']))->paginate(10)->withQueryString()]);
+        return view('produk.index', ['title' => 'Produk','produks' =>  Produk::latest()->filter(request(['search']))->paginate(10)->withQueryString()]);
     }
 
     /**
@@ -26,7 +28,7 @@ class ProdukController extends Controller
      */
     public function create()
     {
-        return view('dashboard.Produk.create',['title'=>'Tambah Barang', 'Produks' => Produk::all(),'jeniskategoris'=>kategori::all()]);
+        return view('produk.create',['title'=>'Tambah Barang', 'produks' => Produk::all(),'kategoris'=>Kategori::all()]);
     }
 
     /**
@@ -41,14 +43,13 @@ class ProdukController extends Controller
         (
             [
                 'kode' => 'required|max:100|min:5',
-                'name' => 'required|max:200|min:5',
-                'kategori' => 'required',
-                'tanggal' => 'required|',
-                'hrg_beli' => 'required|',
-                'hrg_jual' => 'required|',
+                'nama_produk' => 'required|max:200|min:5',
+                'id_kategori' => 'required',
+                'harga' => 'required|',
+                'detail' => 'required|min:30',
                 'stock' => 'required|',
                 'gambar' => 'image|file|max:1024',
-                'detail' => 'required|min:1000'
+
 
             ]
         );
@@ -59,16 +60,16 @@ class ProdukController extends Controller
         }
 
         Produk::create($validateData);
-        return redirect('/dashboard/Produk')->with('success','Data Post Berhasil di Simpan');
+        return redirect('/produk')->with('success','Data Post Berhasil di Simpan');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Produk  $Produk
+     * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function show(Produk $Produk)
+    public function show(Produk $produk)
     {
         //return view('dashboard.2021.view', ['title'=>'view', 'post'=> $barangs]);
     }
@@ -76,41 +77,39 @@ class ProdukController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Produk  $Produk
+     * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function edit(Produk $Produk)
+    public function edit(Produk $produk)
     {
         //
-        return view('dashboard.Produk.update',['title'=>'Edit Barang'.$Produk->name, 'Produk' => $Produk,'namakategoris'=>kategori::all()]);
+        return view('produk.update',['title'=>'Edit Produk'.$produk->name, 'produk' => $produk,'kategoris'=>Kategori::all()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Produk  $Produk
+     * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Produk $Produk)
+    public function update(Request $request, Produk $produk)
     {
         $rules =
             ['kode' => 'required|max:100|min:5',
-            'name' => 'required|max:200|min:5',
-            'type2021_id' => 'required',
-            'tanggal' => 'required|',
-            'hrg_beli' => 'required|',
-            'hrg_jual' => 'required|',
-            'kondisi' => 'required|',
+            'nama_produk' => 'required|max:200|min:5',
+            'id_kategori' => 'required',
+            'harga' => 'required|',
+            'detail' => 'required|min:30',
             'stock' => 'required|',
             'gambar' => 'image|file|max:1024',
-            'ket' => 'required|min:30'
+
             ];
 
         //Jika data slug yang dikirim tidak sama dengan data slug di table post
-        if($request->kode != $Produk->kode){
+        if($request->kode != $produk->kode){
             //tambahkan validasi untuk cek apakaah ada tau belum
-            $rules['kode'] = 'required|unique:Produks';
+            $rules['kode'] = 'required|unique:produks';
         }
 
         //return $request->file('gambar');
@@ -123,24 +122,24 @@ class ProdukController extends Controller
             $validateData['gambar'] = $request->file('gambar')->store('post-images');
         }
 
-        Produk::where('id',$Produk->id)->update($validateData);
+        Produk::where('id',$produk->id)->update($validateData);
 
-        return redirect('/dashboard/Produk')->with('success','Data Post Berhasil diupdate');
+        return redirect('/produk')->with('success','Data Post Berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Produk  $Produk
+     * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Produk $Produk)
+    public function destroy(Produk $produk)
     {
         //Storage::delete($)
-        if($Produk->gambar){
-            Storage::delete($Produk->gambar);
+        if($produk->gambar){
+            Storage::delete($produk->gambar);
         }
-        Produk::destroy($Produk->id);
-        return redirect('/dashboard/Produk')->with('success','Barang Berhasil dihapus');
+        Produk::destroy($produk->id);
+        return redirect('/produk')->with('success','Barang Berhasil dihapus');
     }
 }

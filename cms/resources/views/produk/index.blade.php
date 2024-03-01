@@ -1,75 +1,88 @@
-@extends('layouts.app')
+@extends('dashboard.layouts.main')
+@section('admin-magang')
+    <div class="row">
 
-@section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12 justify-content-between d-flex">
-                    <h1 class="m-0">{{ __('Agent') }}</h1>
-                    <a href="{{ route('admin.agents.create') }}" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> </a>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="card">
-                        <div class="card-body p-0">
-
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Produk</th>
-                                        <th>Image</th>
-                                        <th>Excerpt</th>
-                                        <th>Job</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($agents as $agent)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $agent->title }}</td>
-                                        <td>
-                                            <a href="{{ Storage::url($agent->image) }}" target="_blank">
-                                                <img src="{{ Storage::url($agent->image) }}" width="100" alt="">
-                                            </a>
-                                        </td>
-                                        <td>{{ $agent->excerpt }}</td>
-                                        <td>{{ $agent->job->name }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.agents.edit', [$agent]) }}" class="btn btn-sm btn-info"> <i class="fa fa-edit"></i> </a>
-                                            <form onclick="return confirm('are you sure ?');" class="d-inline-block" action="{{ route('admin.agents.destroy', [$agent]) }}" method="post">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-sm btn-danger"> <i class="fa fa-trash"></i> </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer clearfix">
-                            {{ $agents->links() }}
-                        </div>
-                    </div>
-
+        <div class="col-lg-12">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Info!</strong> {{ session('success') }}
                 </div>
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+            @endif
+        </div>
+
+        <div class="col-lg-8">
+            <a href="/produk/create" class="btn btn-success"><span data-feather='plus-circle'></span>
+                Tambah</a>
+        </div>
+        <div class="col-lg-4">
+            <form action="/produk" method="get">
+                <div class="input-group flex-nowrap">
+                    <input type="text" name="search" value="{{ request('search') }}" class="form-control"
+                        placeholder="Cari" aria-label="Username">
+                    <button type="submit" class="input-group-text btn btn-outline-success"><span
+                            data-feather="search"></span></button>
+                </div>
+            </form>
+        </div>
     </div>
-    <!-- /.content -->
+
+    <div class="table-responsive-lg">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Kode Barang</th>
+                    <th scope="col">Nama Barang</th>
+                    <th scope="col">Gambar</th>
+                    <th scope="col">Harga</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($produks as $item)
+                    <tr class="">
+                        <td scope="row">{{ $loop->iteration }} </td>
+                        <td>{{ $item->kode }}</td>
+                        <td>{{ $item->nama_produk }}</td>
+                        <td>{{ $item->harga }}</td>
+                        <td>{{ $item->kategori->kategori }}</td>
+                        <td>
+                            @if ($item->gambar)
+                                <img src="{{ asset('storage/' . $item->gambar) }}" style="max-height: 150px"
+                                    class="img-fluid mt-2 d-block" alt="{{ $item->name }}">
+                            @else
+                                <img src="https://source.unsplash.com/1200x400? {{ $item->name }}" class="img-fluid mt-2"
+                                    alt="{{ $item->name }}">
+                            @endif
+                        </td>
+                        @can('admin')
+                            <td>
+                                <a href="/produk/{{ $item->kode }}/edit" class="badge bg-primary"><span
+                                        data-feather="edit"></span></a>
+
+                                <form action="/produk/{{ $item->kode }}" method="post" class="d-inline">
+                                    <!-- Timpa method post menjadi delete -->
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit"
+                                        onclick="return confirm('Apakah anda yakin ingin hapus ? {{ $item->nama_produk }}')"
+                                        class="badge bg-danger border-0">
+                                        <span data-feather="x-circle">
+                                    </button>
+                                </form>
+                            </td>
+                        @endcan
+                    </tr>
+                @endforeach
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <!--Menampilkan page/halaman-->
+        {{ $produks->links() }}
+    </div>
 @endsection

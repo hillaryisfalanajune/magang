@@ -38,7 +38,6 @@ class Produk extends Model
     {
         //Post ke Categories Relasi satu ke satu
         return $this->belongsTo(Kategori::class);
-
     }
 
     //user ->oleh laravel user_id, ganti author_id

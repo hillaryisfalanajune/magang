@@ -1,53 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-class Type2021 extends Model
+class KategoriController extends Controller
 {
-    use HasFactory;
-    protected $guarded = ['id'];//tidak boleh manual diisi
-
-
-    public function scopeFilter($query, array $filters){
-
-        $query->when($filters['search'] ?? false,function($query,$search){
-            return
-            $query->where('kode','like','%'. $search.'%')
-            ->orWhere('type','like','%'. $search.'%');
-        });
-
-
-        $query->when(
-            //author berasal dari url yang di kirim
-            $filters['author'] ?? false,
-            fn ($query,$author) =>
-            //author berasal dari relasi method public function author()
-            $query->whereHas('author',
-                fn($query) =>
-                $query->where('username', $author)
-            )
-
-        );
-
-    }
-
-   //Relasi tabel users ke posts 1 ke N
-   public function kategori(){
-    return $this->hasMany(Kategori::class);
-}
-
-    //user ->oleh laravel user_id, ganti author_id
-    public function author()
-    {
-        //Post ke Categories Relasi satu ke satu
-        return $this->belongsTo(User::class,'user_id');
-    }
-
-    public function getRouteKeyName()
-    {
-        return 'id';
-    }
+    //
 }
