@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Type2021 extends Model
+class Produk extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];//tidak boleh manual diisi
-
+    protected $guarded = ['id'];
+    protected $with = ['author','kategori'];
 
     public function scopeFilter($query, array $filters){
 
         $query->when($filters['search'] ?? false,function($query,$search){
             return
             $query->where('kode','like','%'. $search.'%')
-            ->orWhere('type','like','%'. $search.'%');
+            ->orWhere('name','like','%'. $search.'%');
         });
 
 
@@ -34,14 +34,11 @@ class Type2021 extends Model
 
     }
 
-   //Relasi tabel users ke posts 1 ke N
-   public function kategori(){
-<<<<<<< HEAD
-    return $this->hasMany(kategori::class);
-=======
-    return $this->hasMany(Kategori::class);
->>>>>>> 5d53695b8330d64ae4a55081b02c96f3d85b9442
-}
+    public function kategori()
+    {
+        //Post ke Categories Relasi satu ke satu
+        return $this->belongsTo(Kategori::class);
+    }
 
     //user ->oleh laravel user_id, ganti author_id
     public function author()
@@ -52,6 +49,6 @@ class Type2021 extends Model
 
     public function getRouteKeyName()
     {
-        return 'id';
+        return 'kode';
     }
 }

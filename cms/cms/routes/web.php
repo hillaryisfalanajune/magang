@@ -27,7 +27,7 @@ use App\Http\Controllers\ProdukController;
 */
 
 Route::get('/', function () {
-    return view('home',['title'=>'Home  Pages', 'active' => 'home']);
+    return view('home',['title'=>'Home Pages', 'active' => 'home']);
 });
 
 Route::get('/about-me', function () {
@@ -80,6 +80,9 @@ Route::post('/register', [RegisterController::class, 'store']);
 
 Route::get('/dashboard',function(){
     return view('dashboard.index',['title' => 'Home']);
+})->middleware('auth');//untuk proteksi
+Route::get('/produk',function(){
+    return view('dashboard.produk.index',['title' => 'Home']);
 })->middleware('auth');//untuk proteksi
 
 Route::get('dashboard/post/checkSlug',[DashboardPostController::class, 'checkSlug'])->middleware('auth');
